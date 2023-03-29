@@ -14,5 +14,5 @@ class ProductFilter(FilterSet):
             'name':['icontains'],
             'price': ['lt'],
             'quantity': ['gt'],
-            # 'category'
+            'category': ['exact']
         }
