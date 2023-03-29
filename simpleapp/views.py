@@ -1,10 +1,10 @@
 from datetime import datetime
 # from pprint import pprint
 # from django.views import View  # импортируем простую вьюшку
-from django.shortcuts import render
+# from django.shortcuts import render
 
 from django.views.generic import DetailView, ListView
-from django.core.paginator import Paginator
+# from django.core.paginator import Paginator
 
 from .models import Product
 from .filters import ProductFilter
