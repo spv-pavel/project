@@ -2,7 +2,6 @@ from django.core.validators import MinValueValidator
 from django.db import models
 
 
-# Товар для нашей витрины
 class Product(models.Model):
     name = models.CharField(
         max_length=50,
@@ -21,9 +20,7 @@ class Product(models.Model):
         return f'{self.name}: {self.quantity}'
 
 
-# Категория, к которой будет привязываться товар
 class Category(models.Model):
-    # названия категорий тоже не должны повторяться
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
