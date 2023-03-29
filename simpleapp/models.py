@@ -10,21 +10,15 @@ class Product(models.Model):
     )
     description = models.TextField()
     quantity = models.IntegerField(
-        validators=[MinValueValidator(0)],
+        validators=[MinValueValidator(0, 'Quantity should be >= 0')],
     )
     # поле категории будет ссылаться на модель категории
-    category = models.ForeignKey(
-        to='Category',
-        on_delete=models.CASCADE,
-        # все продукты в категории будут доступны через поле products
-        related_name='products',
-    )
-    price = models.FloatField(
-        validators=[MinValueValidator(0.0)],
-    )
+    # все продукты в категории будут доступны через поле products
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='products')
+    price = models.FloatField(default=0.0)
 
     def __str__(self):
-        return f'{self.name.title()}: {self.description[:20]}'
+        return f'{self.name}: {self.quantity}'
 
 
 # Категория, к которой будет привязываться товар
