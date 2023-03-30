@@ -1,16 +1,12 @@
-<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'default.html' %}
 
 {% load custom_filters %}
-<!-- Подключаем новый файл с нашим тегом -->
 {% load custom_tags %}
 
-<!-- Название у нас будет products -->
 {% block title %}
     Список продуктов
 {% endblock title %}
 
-<!-- В контенте на странице мы выводим все товары -->
 {% block content %}
     <h1>Все товары</h1>
 
@@ -40,14 +36,14 @@
             </thead>
             <!-- Поменяем products на filter.qs, т. к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
             {% for product in filter.qs %}
-            <tr>
-                <td>{{ product.name|title }}</td>
-                <td>{{ product.description|truncatewords:2|title }}</td>
-                <td>{{ product.category.name|title }}</td>
-                <!-- Используем наш фильтр -->
-                <td>{{ product.price|currency:"rub" }}</td>
-                <td>{{ product.quantity }}</td>
-            </tr>
+                <tr>
+                    <td>{{ product.name|title }}</td>
+                    <td>{{ product.description|truncatewords:2|title }}</td>
+                    <td>{{ product.category.name|title }}</td>
+                    <!-- Используем наш фильтр -->
+                    <td>{{ product.price|currency:"rub" }}</td>
+                    <td>{{ product.quantity }}</td>
+                </tr>
             {% endfor %}
         </table>
     {% else %}
@@ -74,4 +70,9 @@
             <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
         {% endif %}
     {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
+        <input type="submit" value="Добавить товар">
+    </form>
 {% endblock content %}

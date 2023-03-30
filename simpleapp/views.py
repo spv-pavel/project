@@ -6,8 +6,9 @@ from datetime import datetime
 from django.views.generic import DetailView, ListView
 # from django.core.paginator import Paginator
 
-from .models import Product
+from .models import Product, Category
 from .filters import ProductFilter
+from .forms import ProductForm
 
 
 class ProductsList(ListView):
@@ -16,14 +17,22 @@ class ProductsList(ListView):
     # queryset = Product.objects.filter(price__lt=300).order_by('-name')
     template_name = 'products.html'
     context_object_name = 'products'
-    paginate_by = 1  # поставим постраничный вывод в один элемент
+    paginate_by = 1
+    form_class = ProductForm  # добавляем форм класс, чтобы получать доступ к форме через метод POST
 
     # забираем отфильтрованные объекты переопределяя метод get_context_data у наследуемого класса
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['filter'] = ProductFilter(self.request.GET,
-                                          queryset=self.get_queryset())  # вписываем наш фильтр в контекст
+        context['filter'] = ProductFilter(self.request.GET, queryset=self.get_queryset())
+        context['categories'] = Category.objects.all()
+        context['form'] = ProductForm()
         return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)  # создаём новую форму, забиваем в неё данные из POST-запроса
+        if form.is_valid():  # если пользователь ввёл всё правильно и нигде не ошибся, то сохраняем новый товар
+            form.save()
+        return super().get(request, *args, **kwargs)
 
     # # Метод get_context_data позволяет нам изменить набор данных,
     # # который будет передан в шаблон.
