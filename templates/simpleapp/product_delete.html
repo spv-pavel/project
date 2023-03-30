@@ -1,0 +1,33 @@
+{% extends 'simpleapp/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+    Список товаров
+{% endblock title %}
+
+{% block content %}
+    <h2>Вы действительно хотите удалить данный товар?</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Категория</th>
+                <th>Цена</th>
+                <th>Количество</th>
+            </tr>
+        </thead>
+        <tr>
+            <td>{{ product.name|title }}</td>
+            <td>{{ product.description|title }}</td>
+            <td>{{ product.category.name|title }}</td>
+            <td>{{ product.price|currency:"rub" }}</td>
+            <td>{{ product.quantity }}</td>
+        </tr>
+    </table>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" value="подтвердить">
+    </form>
+{% endblock content %}

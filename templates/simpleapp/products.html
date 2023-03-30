@@ -27,11 +27,16 @@
                 </tr>
             </thead>
             <!-- Поменяем products на filter.qs, т. к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
-            {% for product in filter.qs %}
+            {% for product in products %}
                 <tr>
                     <!-- При нажатии на имя товара в таблице нас теперь будет перекидывать на страницу с информацией о товаре -->
                     <td>
+                        <!-- При нажатии на имя товара в таблице нас теперь будет перекидывать на страницу с самого товара -->
                         <a href="{% url 'product_detail' product.id %}">{{ product.name|title }}</a>
+                        <!-- добавим ссылку на редактирование товара-->
+                        <a href="{% url 'product_update' product.id %}"><u>Редактировать</u></a>
+                        <!-- добавим ссылку на удаление товара-->
+                        <a href="{% url 'product_delete' product.id %}"><u> Удалить </u></a>
                     </td>
                     <td>{{ product.name|title }}</td>
                     <td>{{ product.description|truncatewords:2|title }}</td>
@@ -45,10 +50,6 @@
     {% else %}
         <h2>Товаров нет!</h2>
     {% endif %}
+    <a href="{% url 'product_create' %}">Добавить новый товар</a> <br>
     {% include 'paginate.html' %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Добавить товар">
-    </form>
 {% endblock content %}
