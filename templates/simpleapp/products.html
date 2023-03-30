@@ -15,11 +15,6 @@
     <!-- Если в переменной next_sale будет None, то выведется указанный в фильтре текст -->
     <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>
     <hr>
-    <!-- Перед таблицей добавим форму для поиска -->
-    <form method="GET">
-        {{ filter.form }} <!-- Форму от фильтров за нас сделает Django. А вот кнопку, увы придётся делать самому -->
-        <input type="submit" value="Найти">
-    </form>
     {% if products %}
         <table>
             <thead>
@@ -53,7 +48,7 @@
     {% include 'paginate.html' %}
     <form method="POST">
         {% csrf_token %}
-        {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
+        {{ form }}
         <input type="submit" value="Добавить товар">
     </form>
 {% endblock content %}
