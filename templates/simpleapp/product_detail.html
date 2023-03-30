@@ -1,0 +1,28 @@
+{% extends 'simpleapp/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+    Товар
+{% endblock title %}
+
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Категория</th>
+                <th>Цена</th>
+                <th>Количество</th>
+            </tr>
+        </thead>
+        <tr>
+            <td>{{ product.name|title }}</td>
+            <td>{{ product.description|title }}</td>
+            <td>{{ product.category.name|title }}</td>
+            <td>{{ product.price|currency:"rub" }}</td>
+            <td>{{ product.quantity }}</td>
+        </tr>
+    </table>
+{% endblock content %}

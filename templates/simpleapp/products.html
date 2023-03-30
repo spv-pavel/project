@@ -1,4 +1,4 @@
-{% extends 'default.html' %}
+{% extends 'simpleapp/default.html' %}
 
 {% load custom_filters %}
 {% load custom_tags %}
@@ -9,9 +9,6 @@
 
 {% block content %}
     <h1>Все товары</h1>
-
-    <!-- Вот так выглядело использование переменной и фильтра -->
-    <!-- <h3>{{ time_now|date:'M d Y l' }}</h3> -->
     <!-- А вот так мы используем наш тег-->
     <h3>{% current_time '%b %d %Y %A' %}</h3>
 
@@ -37,6 +34,10 @@
             <!-- Поменяем products на filter.qs, т. к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
             {% for product in filter.qs %}
                 <tr>
+                    <!-- При нажатии на имя товара в таблице нас теперь будет перекидывать на страницу с информацией о товаре -->
+                    <td>
+                        <a href="{% url 'product_detail' product.id %}">{{ product.name|title }}</a>
+                    </td>
                     <td>{{ product.name|title }}</td>
                     <td>{{ product.description|truncatewords:2|title }}</td>
                     <td>{{ product.category.name|title }}</td>
@@ -49,27 +50,7 @@
     {% else %}
         <h2>Товаров нет!</h2>
     {% endif %}
-    <!-- Проверяем, что поддерживается постраничный вывод -->
-    {% if is_paginated %}
-        <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
-        {% if page_obj.has_previous %}
-            <a href="?page=1">First</a>
-            <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
-        {% endif %}
-        <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
-        {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-                <a>{{ num }}</a>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                <a href="?page={{ num }}">{{ num }}</a>
-            {% endif %}
-        {% endfor %}
-        <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">>>></a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-        {% endif %}
-    {% endif %}
+    {% include 'paginate.html' %}
     <form method="POST">
         {% csrf_token %}
         {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
