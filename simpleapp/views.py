@@ -17,10 +17,12 @@ class ProductsView(ListView):
     context_object_name = 'products'
     ordering = '-price'
     paginate_by = 1
+    form_class = ProductForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter'] = ProductFilter(self.request.GET, queryset=self.get_queryset())
+        context['form'] = ProductForm()
         return context
 
 
